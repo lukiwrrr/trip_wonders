@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/css/assets/img/logo.png" />
+    <title>Register Page</title>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+        * {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        html,
+        body {
+            height: 100%;
+            background-color: #ff9d00;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg stroke='%23000' stroke-width='29' stroke-opacity='0.05' %3E%3Ccircle fill='%23ff9d00' cx='0' cy='0' r='1800'/%3E%3Ccircle fill='%23f29a00' cx='0' cy='0' r='1700'/%3E%3Ccircle fill='%23e59700' cx='0' cy='0' r='1600'/%3E%3Ccircle fill='%23d99300' cx='0' cy='0' r='1500'/%3E%3Ccircle fill='%23cd9000' cx='0' cy='0' r='1400'/%3E%3Ccircle fill='%23c18c03' cx='0' cy='0' r='1300'/%3E%3Ccircle fill='%23b68806' cx='0' cy='0' r='1200'/%3E%3Ccircle fill='%23ab840a' cx='0' cy='0' r='1100'/%3E%3Ccircle fill='%23a0800e' cx='0' cy='0' r='1000'/%3E%3Ccircle fill='%23967b12' cx='0' cy='0' r='900'/%3E%3Ccircle fill='%238c7715' cx='0' cy='0' r='800'/%3E%3Ccircle fill='%23837217' cx='0' cy='0' r='700'/%3E%3Ccircle fill='%237a6d1a' cx='0' cy='0' r='600'/%3E%3Ccircle fill='%2371681c' cx='0' cy='0' r='500'/%3E%3Ccircle fill='%2369631e' cx='0' cy='0' r='400'/%3E%3Ccircle fill='%23615e1f' cx='0' cy='0' r='300'/%3E%3Ccircle fill='%23595921' cx='0' cy='0' r='200'/%3E%3Ccircle fill='%23525422' cx='0' cy='0' r='100'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            padding-top: 10px;
+            padding-bottom: 40px;
+            /* background-color: #f5f5f5; */
+        }
+
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+
+        .form-signin .form-floating:focus-within {
+            z-index: 2;
+        }
+
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+    </style>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#signupButton').click(function () {
+                let email = $('#email').val();
+                let password = $('#password').val();
+                let confirmPassword = $('#confirm_password').val();
+
+                let userData = {
+                    email: email,
+                    password: password,
+                    confirm_password: confirmPassword
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/register',
+                    contentType: 'application/json',
+                    data: JSON.stringify(userData),
+                    success: function (response) {
+                        if (response === 'Success') {
+                            // Tampilkan SweetAlert2
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Your account has been created.',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '/';
+                                }
+                            });
+                        } else {
+                            // Tampilkan SweetAlert2 untuk kegagalan
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Failed to sign up. Please try again.',
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                        // Tampilkan SweetAlert2 untuk kesalahan
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error occurred while signing up.',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body class="text-center">
+    <div class="background-image">
+        <img src="/static/img/rinjani.jpg" alt="" width="1000" height="785" style="filter: brightness(85%);">
+    </div>
+    <main class="form-signin">
+        <form id="signupForm">
+            <img src="/static/img/logo.png" alt="" width="300" height="300" style="margin-top: -50px;">
+            <h1 class="h3 fw-normal" style="color: #e7e2e2; margin-top: -50px;">Signup now!</h1>
+            <p class="bg-success" style="color: #f5f5f5; border-radius: 10px;">It's free and takes a minutes</p>
+
+            <div class="input-group mb-3">
+                <input type="text" class="form-control form-control-lg bg-light fs-6" id="email"
+                    placeholder="Email address" name="email">
+            </div>
+            <div class="input-group mb-1">
+                <input type="password" class="form-control form-control-lg bg-light fs-6" id="password"
+                    placeholder="Password" name="password">
+            </div>
+            <div class="input-group mb-1">
+                <input type="password" class="form-control form-control-lg bg-light fs-6" id="confirm_password"
+                    placeholder="Confirm Your Password" name="confirm_password">
+            </div>
+
+            <button id="signupButton" class="w-100 btn btn-lg btn-primary mb-3" type="button">Sign Up</button>
+            <button class="btn btn-lg btn-danger w-100">Clear</button>
+            <div class="row mt-3">
+                <small style="color: #f5f5f5;">Already have an account? <a href="/login">Login Here</a></small>
+            </div>
+        </form>
+        <p class="mt-5 mb-3" style="color: #f5f5f5;">&copy; TRIP WONDERS | 2023</p>
+    </main>
+</body>
+
+</html>
